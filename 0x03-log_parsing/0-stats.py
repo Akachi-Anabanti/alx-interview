@@ -1,54 +1,46 @@
 #!/usr/bin/python3
-# Author: Anabanti Akachi
+"""script that passes a http logs with metrics"""
 
-"""Defines a script that reads stdin line by line
-of the format
-`<IP Address> - [<date>] "GET /projects/260 HTTP/1.1"
-<status code> <file size>`
-and prints the stats in specifiec format
 
-`
-File size: 14525
-200: 1
-300: 2
-`
-"""
-
-if __name__ == '__main__':
+if __name__ == "__main__":
     import sys
-    from collections import defaultdict
 
-    # Defines the global variables
-    total_file_size = 0
-    status_codes_dict = defaultdict(int)  # sets dict keys to int data type
-    status_codes_list = [200, 301, 400, 401, 403, 404, 405, 500]
-    total_line_cnt = 0
+    def print_log(status_codes, file_size):
+        """prints the formated stats"""
+        print("File size: {:d}".format(file_size))
+        for status_code, count in sorted(status_codes.items()):
+            if count:
+                print("{:s}: {:d}".format(status_code, count))
+    status_codes = {"200": 0,
+                    "301": 0,
+                    "400": 0,
+                    "401": 0,
+                    "403": 0,
+                    "404": 0,
+                    "405": 0,
+                    "500": 0
+                    }
+    file_size = 0
+    lines = 0
 
     try:
-        for line_count, line in enumerate(sys.stdin):
-            parts = line.split(" ")
-            status_code = int(parts[-2])
-            file_size = int(parts[-1])
-
-            total_file_size += file_size
-
-        # check if the status code is in the parsed status codes
-            if status_code in status_codes_list and type(status_code) == int:
-                # add the status code and set the count
-                status_codes_dict[status_code] += 1
-
-            if line_count % 10 == 0 and line_count > 0:
-                # for every 10 lines
-                print("File size: {}".format(total_file_size))
-                for status_code in sorted(status_codes_dict.keys()):
-                    print("{}: {}".format(
-                                      status_code,
-                                      status_codes_dict[status_code]
-                                      ))
-        if line_count == 0:
-            print("File size: {}".format(total_file_size))
-            print("{}: {}".format(status_code, status_codes_dict[status_code]))
-    except KeyboardInterrupt:  # Handle CTRL + C
-        print("File size: {}".format(total_file_size))
-        for status_code in sorted(status_codes_dict.keys()):
-            print("{}: {}".format(status_code, status_codes_dict[status_code]))
+        """Read stdin line by line"""
+        for line in sys.stdin:
+            if lines != 0 and lines % 10 == 0:
+                # print every 10 lines
+                print_log(status_codes, file_size)
+            lines += 1
+            log = line.split()
+            try:
+                # extract info
+                status_code = log[-2]
+                if status_code in status_codes:
+                    status_codes[status_code] += 1
+                file_size = int(log[-1])
+            except Exception:
+                pass
+        print_log(status_codes, file_size)
+    except KeyboardInterrupt:
+        # handle CTRL + C
+        print_log(status_codes, file_sixe)
+        raise
