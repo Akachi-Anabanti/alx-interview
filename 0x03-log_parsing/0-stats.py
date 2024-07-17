@@ -36,7 +36,7 @@ if __name__ == "__main__":
                 status_code = log[-2]
                 if status_code in status_codes:
                     status_codes[status_code] += 1
-                file_size = int(log[-1])
+                file_size += int(log[-1])
             except Exception:
                 pass
         print_log(status_codes, file_size)
