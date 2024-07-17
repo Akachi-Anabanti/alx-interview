@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/python3
 # Author: Anabanti Akachi
 
 """Defines a script that reads stdin line by line
