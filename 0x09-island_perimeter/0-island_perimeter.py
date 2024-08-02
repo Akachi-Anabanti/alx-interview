@@ -32,7 +32,7 @@ def island_perimeter(grid):
                 if left == 0 and right == 0 and top == 0 \
                         and bottom == 0:
                             perimeter += 4
-                            continue
+                            return perimeter
                 cell_perimeter = 4
                 if left == 1:
                     cell_perimeter -= 1
