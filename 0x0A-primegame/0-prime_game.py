@@ -9,24 +9,23 @@ def seive_of_eratosthenes(n):
     # A value in prime[i] will fina,y be false if i is not
     # a prime, else true
 
-    is_prime = [True] * (n + 1)
+    prime = [True] * (n + 1)
 
     p = 2
 
     while (p * p <= n):
-        if (is_prime[p]):
-
+        if prime[p]:
             # set the multiples of p to false
-
             for i in range(p * p, n + 1, p):
-                is_prime[i] = False
+                prime[i] = False
         p += 1
 
-    return [num for num in range(2, n + 1) if is_prime[num]]
+    return [num for num in range(2, n + 1) if prime[num]]
 
 
 def isWinner(x, nums):
-    """Args:
+    """
+    Args:
         nums (list): List of numbers
         x (int): The number of rounds
     """
