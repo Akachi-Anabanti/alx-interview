@@ -46,23 +46,13 @@ def isWinner(x, nums):
         n = nums[i]
         primes = sieve_of_eratosthenes(n)
 
-        if len(primes) == 0:
+        if not primes:
             bens_score += 1
-            continue
-
-        maria_picks_count = 0
-        ben_picks_count = 0
-
-        for j in primes:
-            if (i + 1) % 2 == 1:  # Marias turn
-                maria_picks_count += 1
+        else:
+            if len(primes) % 2 == 1:
+                marias_score += 1
             else:
-                ben_picks_count += 1  # Bens turn
-        if maria_picks_count > ben_picks_count:
-            marias_score += 1
-        elif ben_picks_count > maria_picks_count:
-            bens_score += 1
-
+                bens_score += 1
     if marias_score > bens_score:
         return 'Maria'
     elif bens_score > marias_score:
